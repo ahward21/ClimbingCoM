@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ClimbAnalytics - Advanced Center of Mass Trajectory Analysis for Climbing">
+    <title>ClimbAnalytics - Center of Mass Trajectory Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="4" />
+                        <path d="M12 8v8M8 12h8" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>ClimbAnalytics</h1>
+                    <span class="subtitle">Center of Mass Trajectory Analysis</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="single">📹 Single Analysis</button>
+                    <button class="tab-btn" data-tab="multicam">📐 Multi-Camera</button>
+                    <button class="tab-btn" data-tab="batch">📦 Batch Process</button>
+                    <a href="/viewer3d.html" class="tab-btn viewer-link" target="_blank">🎬 3D Viewer</a>
+                </div>
+                <button class="help-btn" id="helpBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <circle cx="12" cy="17" r="0.5" fill="currentColor" />
+                    </svg>
+                    Help
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - Upload & Settings -->
+            <aside class="left-panel">
+                <!-- Single Video Upload Section -->
+                <section class="panel-section upload-section" id="singleUploadSection">
+                    <h2 class="section-title">Upload Video</h2>
+                    <p class="section-subtitle">Upload your climbing video for analysis</p>
+
+                    <div class="upload-group">
+                        <label class="upload-label">Video File</label>
+                        <div class="upload-box" id="uploadBox1" data-angle="1">
+                            <input type="file" id="videoInput1" accept="video/*" hidden>
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1" />
+                                    <polyline points="7 10 12 5 17 10" />
+                                    <line x1="12" y1="5" x2="12" y2="16" />
+                                </svg>
+                                <span class="upload-text">Choose video file...</span>
+                            </div>
+                            <span class="file-name" id="fileName1"></span>
+                        </div>
+                    </div>
+
+                    <button class="analyze-btn" id="analyzeBtn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        Analyze Climb
+                    </button>
+                </section>
+
+                <!-- Multi-Camera Upload Section (hidden by default) -->
+                <section class="panel-section upload-section" id="multicamUploadSection" style="display: none;">
+                    <h2 class="section-title">Upload Videos</h2>
+                    <p class="section-subtitle">Provide two camera angles of the same climb</p>
+
+                    <div class="upload-group">
+                        <label class="upload-label">Angle 1 (Front View)</label>
+                        <div class="upload-box" id="uploadBoxMulti1" data-angle="1">
+                            <input type="file" id="videoInputMulti1" accept="video/*" hidden>
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1" />
+                                    <polyline points="7 10 12 5 17 10" />
+                                    <line x1="12" y1="5" x2="12" y2="16" />
+                                </svg>
+                                <span class="upload-text">Choose video file...</span>
+                            </div>
+                            <span class="file-name" id="fileNameMulti1"></span>
+                        </div>
+                    </div>
+
+                    <div class="upload-group">
+                        <label class="upload-label">Angle 2 (Side View)</label>
+                        <div class="upload-box" id="uploadBoxMulti2" data-angle="2">
+                            <input type="file" id="videoInputMulti2" accept="video/*" hidden>
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1" />
+                                    <polyline points="7 10 12 5 17 10" />
+                                    <line x1="12" y1="5" x2="12" y2="16" />
+                                </svg>
+                                <span class="upload-text">Choose video file...</span>
+                            </div>
+                            <span class="file-name" id="fileNameMulti2"></span>
+                        </div>
+                    </div>
+
+                    <button class="analyze-btn" id="analyzeMultiBtn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        Analyze Multi-View
+                    </button>
+                </section>
+
+                <!-- Batch Upload Section (hidden by default) -->
+                <section class="panel-section upload-section" id="batchUploadSection" style="display: none;">
+                    <h2 class="section-title">Batch Upload</h2>
+                    <p class="section-subtitle">Upload multiple videos for batch processing</p>
+
+                    <div class="upload-group">
+                        <label class="upload-label">Video Files</label>
+                        <div class="upload-box batch-upload" id="uploadBoxBatch">
+                            <input type="file" id="videoInputBatch" accept="video/*" multiple hidden>
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1" />
+                                    <polyline points="7 10 12 5 17 10" />
+                                    <line x1="12" y1="5" x2="12" y2="16" />
+                                </svg>
+                                <span class="upload-text">Choose multiple videos...</span>
+                            </div>
+                            <div class="batch-file-list" id="batchFileList"></div>
+                        </div>
+                    </div>
+
+                    <button class="analyze-btn" id="analyzeBatchBtn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        Process All Videos
+                    </button>
+                </section>
+
+                <!-- Visualization Section -->
+                <section class="panel-section visualization-section">
+                    <div class="section-header collapsible" id="vizHeader">
+                        <h2 class="section-title">Visualization</h2>
+                        <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="18 15 12 9 6 15" />
+                        </svg>
+                    </div>
+                    <p class="section-subtitle">Customize how results are displayed</p>
+
+                    <div class="viz-content" id="vizContent">
+                        <!-- Trail Length Slider -->
+                        <div class="setting-group">
+                            <label class="setting-label">Trail Length</label>
+                            <div class="slider-wrapper">
+                                <input type="range" id="trailLength" min="5" max="120" value="30" step="5"
+                                    class="slider-input">
+                                <span class="slider-value" id="trailLengthValue">30 frames</span>
+                            </div>
+                        </div>
+
+                        <!-- Keypoint Size Slider -->
+                        <div class="setting-group">
+                            <label class="setting-label">Keypoint Size</label>
+                            <div class="slider-wrapper">
+                                <input type="range" id="keypointSize" min="2" max="15" value="6" step="1"
+                                    class="slider-input">
+                                <span class="slider-value" id="keypointSizeValue">6px</span>
+                            </div>
+                        </div>
+
+                        <!-- CoM Size Slider -->
+                        <div class="setting-group">
+                            <label class="setting-label">CoM Marker Size</label>
+                            <div class="slider-wrapper">
+                                <input type="range" id="comSize" min="5" max="25" value="12" step="1"
+                                    class="slider-input">
+                                <span class="slider-value" id="comSizeValue">12px</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">Show Keypoints</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="showKeypoints" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">Smooth CoM Trajectory</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="smoothCom" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">Persistent Trail</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="persistentTrail">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">Speed Colors (CoM)</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="showSpeedColor">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rendering Options Section -->
+                <section class="panel-section">
+                    <div class="section-header collapsible" id="renderHeader">
+                        <h2 class="section-title">Rendering Options</h2>
+                        <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="18 15 12 9 6 15" />
+                        </svg>
+                    </div>
+                    <p class="section-subtitle">Anonymization & output settings</p>
+
+                    <div class="render-content" id="renderContent">
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">
+                                <span>📊 Pose Only Mode</span>
+                                <small>Render skeleton on black background</small>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="stickFigureMode">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">
+                                <span>🔧 Stabilize Skeleton</span>
+                                <small>Filter impossible poses</small>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="stabilizeSkeleton" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-group toggle-setting">
+                            <label class="setting-label">
+                                <span>👻 Hide Skeleton (CoM Only)</span>
+                                <small>Show only CoM trail (combine with 'Pose Only' for black bg)</small>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="hideSkeleton">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Right Panel - Results -->
+            <section class="right-panel">
+                <h2 class="section-title">Analysis Results</h2>
+                <p class="section-subtitle" id="resultSubtitle">Upload a video to begin analysis</p>
+
+                <div class="results-container" id="resultsContainer">
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="2" y="4" width="20" height="16" rx="2" />
+                                <circle cx="12" cy="12" r="3" />
+                                <line x1="12" y1="6" x2="12" y2="7" />
+                            </svg>
+                        </div>
+                        <h3>No Analysis Yet</h3>
+                        <p>Upload a video of your climb and click "Analyze Climb" to see your center of mass trajectory
+                            and performance metrics.</p>
+                        <div class="info-note">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            <span>For best results, ensure the video captures the entire climb from a stable
+                                position.</span>
+                        </div>
+                    </div>
+
+                    <!-- Processing State -->
+                    <div class="processing-state" id="processingState" style="display: none;">
+                        <div class="processing-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <h3 id="processingTitle">Analyzing...</h3>
+                        <p id="processingMessage">Processing your climbing video</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+
+                        <!-- Console Log Area -->
+                        <div class="console-log" id="consoleLog">
+                            <div class="console-header">📋 Processing Log</div>
+                            <div class="console-content" id="consoleContent"></div>
+                        </div>
+                    </div>
+
+                    <!-- Results Display -->
+                    <div class="results-display" id="resultsDisplay" style="display: none;">
+                        <div class="video-container">
+                            <video id="resultVideo" controls>
+                                <source src="" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <div class="metrics-panel" id="metricsPanel">
+                            <div class="metric-card">
+                                <span class="metric-label">Status</span>
+                                <span class="metric-value success" id="metricStatus">Complete</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Model Accuracy</span>
+                                <span class="metric-value" id="metricAccuracy">--</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Processing</span>
+                                <span class="metric-value" id="metricProcessing">--</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Mode</span>
+                                <span class="metric-value" id="metricMode">Standard</span>
+                            </div>
+                        </div>
+
+                        <div class="download-section">
+                            <h3 class="download-title">📥 Download Data</h3>
+                            <div class="download-actions">
+                                <button class="download-btn primary" id="downloadVideoBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                    Video (MP4)
+                                </button>
+                                <button class="download-btn secondary" id="downloadCsvBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                    CoM CSV
+                                </button>
+                                <button class="download-btn secondary" id="downloadConfBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <path d="M12 18v-6" />
+                                        <path d="M9 15l3 3 3-3" />
+                                    </svg>
+                                    Conf. CSV
+                                </button>
+                                <button class="download-btn secondary" id="downloadJsonBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                                        <path d="M12 8v8" />
+                                        <path d="M8 12l8 0" />
+                                        <path d="M8 20l4-4 4 4" />
+                                    </svg>
+                                    3D Skeleton (JSON)
+                                </button>
+                                <button class="download-btn opensim" id="downloadTrcBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M12 2v4" />
+                                        <path d="M12 18v4" />
+                                        <path d="M4.93 4.93l2.83 2.83" />
+                                        <path d="M16.24 16.24l2.83 2.83" />
+                                        <path d="M2 12h4" />
+                                        <path d="M18 12h4" />
+                                    </svg>
+                                    OpenSim (.trc)
+                                </button>
+                            </div>
+
+                            <div class="data-info">
+                                <details class="info-accordion">
+                                    <summary>ℹ️ About 3D Skeleton Data</summary>
+                                    <div class="info-content">
+                                        <p>The <strong>3D Skeleton Data (JSON)</strong> file contains:</p>
+                                        <ul>
+                                            <li><strong>Frame-by-frame 3D joint positions</strong> (17 COCO keypoints)
+                                            </li>
+                                            <li><strong>2D projected joint positions</strong> (original video
+                                                coordinates)</li>
+                                            <li><strong>3D Center of Mass trajectory</strong></li>
+                                            <li><strong>Skeleton connectivity</strong> for rendering</li>
+                                            <li><strong>Metadata</strong> (FPS, resolution, coordinate system)</li>
+                                        </ul>
+                                        <p><strong>Use cases:</strong></p>
+                                        <ul>
+                                            <li>Import into <strong>Blender</strong> for 3D visualization</li>
+                                            <li>Load in <strong>Three.js</strong> for web-based 3D rendering</li>
+                                            <li>Analyze biomechanics in Python/MATLAB</li>
+                                            <li>Create animated climbing tutorials</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <!-- Direct File Access -->
+                            <div class="folder-access">
+                                <div class="folder-info">
+                                    <strong>📁 Files saved to:</strong>
+                                    <code id="outputPath">F:\ClimbingEst\outputs\</code>
+                                </div>
+                                <button class="open-folder-btn" id="openFolderBtn">
+                                    📂 Open Output Folder
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batch Results Display -->
+                    <div class="batch-results" id="batchResults" style="display: none;">
+                        <h3>Batch Processing Results</h3>
+                        <div class="batch-status-log" id="batchStatusLog"></div>
+                        <div class="batch-downloads" id="batchDownloads"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>How to Use ClimbAnalytics</h2>
+                <button class="modal-close" id="closeHelpModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3>📹 Recording Tips</h3>
+                    <ul>
+                        <li>Use a stable camera position (tripod recommended)</li>
+                        <li>Ensure the entire climbing wall is visible</li>
+                        <li>Good lighting improves pose detection accuracy</li>
+                        <li>For multi-camera: position cameras 30-60° apart</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3>⚙️ Visualization Settings</h3>
+                    <ul>
+                        <li><strong>Trail Length:</strong> Number of frames shown in CoM trail (5-120)</li>
+                        <li><strong>Keypoint Size:</strong> Size of skeleton joint markers</li>
+                        <li><strong>Speed Colors:</strong> Green=moving up, Red=moving down</li>
+                        <li><strong>Persistent Trail:</strong> Show entire trail history</li>
+                        <li><strong>Pose Only Mode:</strong> Black background with skeleton only</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3>📊 Understanding Results</h3>
+                    <ul>
+                        <li><strong>CoM Trail:</strong> Shows the path of your center of mass during the climb</li>
+                        <li><strong>Velocity Colors:</strong> Green indicates upward movement, red indicates downward
+                        </li>
+                        <li><strong>Pose Overlay:</strong> Skeleton visualization helps analyze body positioning</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3>💾 Export Formats</h3>
+                    <ul>
+                        <li><strong>Video (MP4):</strong> Annotated video with trajectory overlay</li>
+                        <li><strong>CoM CSV:</strong> Frame-by-frame 3D center of mass coordinates</li>
+                        <li><strong>3D Skeleton (JSON):</strong> Full 3D pose data for biomechanics analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

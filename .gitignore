@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+venv_cuda/
+
+# ClimbingEst Specific Data & Outputs
+uploads/
+outputs/
+*.mp4
+*.csv
+*.json
+*.trc
+*.npz
+
+# Logs
+*.log
+server.log
+
+# Large Model Weights (too big for GitHub usually)
+*.pth
+*.pt
+*.bin
+pretrained_h36m_detectron_coco.bin
+model_final_holds.pth
+yolov8n.pt
+
+# Editor/IDE
+.vscode/
+.idea/
